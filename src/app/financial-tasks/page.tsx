@@ -72,7 +72,7 @@ export default function FinancialTasksPage() {
   const [newTodo, setNewTodo] = useState({
     title: '',
     description: '',
-    priority: 'Medium' as TodoPriority,
+    priority: 'medium' as TodoPriority,
     dueDate: format(new Date(), 'yyyy-MM-dd'),
     budget: '',
     category: '' as ExpenseCategory
@@ -128,7 +128,8 @@ export default function FinancialTasksPage() {
       status: 'Todo' as TodoStatus,
       userId: user?.id || '',
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
+      budget: newTodo.budget ? parseFloat(newTodo.budget) : undefined
     };
 
     setTodos([...todos, todo]);
@@ -136,7 +137,7 @@ export default function FinancialTasksPage() {
     setNewTodo({
       title: '',
       description: '',
-      priority: 'Medium',
+      priority: 'medium',
       dueDate: format(new Date(), 'yyyy-MM-dd'),
       budget: '',
       category: '' as ExpenseCategory
@@ -189,9 +190,9 @@ export default function FinancialTasksPage() {
                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               >
                 <option value="">All</option>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
               </select>
             </div>
             <div>
@@ -308,9 +309,9 @@ export default function FinancialTasksPage() {
                     onChange={(e) => setNewTodo({ ...newTodo, priority: e.target.value as TodoPriority })}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   >
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
                   </select>
                 </div>
               </div>

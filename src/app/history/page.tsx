@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Expense } from '@/types';
+import { Expense, ExpenseCategory } from '@/types';
 import Navbar from '@/components/Navbar';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -34,7 +34,7 @@ function EditModal({ expense, isOpen, onClose, onSave }: EditModalProps) {
   const [formData, setFormData] = useState<Expense>({
     id: '',
     amount: 0,
-    category: 'Food',
+    category: 'Food' as ExpenseCategory,
     date: '',
     description: '',
     userId: ''
@@ -89,7 +89,7 @@ function EditModal({ expense, isOpen, onClose, onSave }: EditModalProps) {
               <label className="block text-sm font-medium text-gray-700">Category</label>
               <select
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value as ExpenseCategory })}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 required
               >

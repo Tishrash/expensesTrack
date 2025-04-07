@@ -15,8 +15,8 @@ const mockTodos: Todo[] = [
     id: '1',
     title: 'Review Monthly Budget',
     description: 'Analyze and adjust monthly budget allocation for different expense categories',
-    priority: 'High',
-    status: 'Todo',
+    priority: 'high', // Changed to lowercase
+    status: 'pending',
     dueDate: format(new Date('2024-03-20'), 'yyyy-MM-dd'),
     budget: 5000,
     category: 'Bills',
@@ -28,8 +28,8 @@ const mockTodos: Todo[] = [
     id: '2',
     title: 'Pay Utility Bills',
     description: 'Pay electricity, water, and internet bills for the month',
-    priority: 'Medium',
-    status: 'InProgress',
+    priority: 'medium', // Changed to lowercase
+    status: 'in_progress',
     dueDate: format(new Date('2024-03-25'), 'yyyy-MM-dd'),
     budget: 300,
     category: 'Bills',
@@ -41,8 +41,8 @@ const mockTodos: Todo[] = [
     id: '3',
     title: 'Plan Grocery Shopping',
     description: 'Create shopping list and budget for weekly groceries',
-    priority: 'Low',
-    status: 'Completed',
+    priority: 'low', // Changed to lowercase
+    status: 'completed',
     dueDate: format(new Date('2024-03-15'), 'yyyy-MM-dd'),
     budget: 200,
     category: 'Food',
@@ -65,7 +65,7 @@ export default function TodoPage() {
   const [newTodo, setNewTodo] = useState({
     title: '',
     description: '',
-    priority: 'Medium' as TodoPriority,
+    priority: 'medium' as TodoPriority, // Changed to lowercase
     dueDate: format(new Date(), 'yyyy-MM-dd'),
     budget: '',
     category: '' as ExpenseCategory
@@ -114,7 +114,7 @@ export default function TodoPage() {
     const newTodoItem: Todo = {
       id: Date.now().toString(),
       ...newTodo,
-      status: 'Todo',
+      status: 'pending',
       userId: user?.id || '',
       budget: newTodo.budget ? parseFloat(newTodo.budget) : undefined,
       dueDate: format(new Date(newTodo.dueDate), 'yyyy-MM-dd'),
@@ -126,7 +126,7 @@ export default function TodoPage() {
     setNewTodo({
       title: '',
       description: '',
-      priority: 'Medium',
+      priority: 'medium', // Changed to lowercase
       dueDate: format(new Date(), 'yyyy-MM-dd'),
       budget: '',
       category: '' as ExpenseCategory
@@ -175,9 +175,9 @@ export default function TodoPage() {
                 className="form-input py-1.5"
               >
                 <option value="">All Status</option>
-                <option value="Todo">Todo</option>
-                <option value="InProgress">In Progress</option>
-                <option value="Completed">Completed</option>
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
               </select>
               <select
                 value={filters.priority}
@@ -185,9 +185,9 @@ export default function TodoPage() {
                 className="form-input py-1.5"
               >
                 <option value="">All Priority</option>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
+                <option value="high">High</option> {/* Changed to lowercase */}
+                <option value="medium">Medium</option> {/* Changed to lowercase */}
+                <option value="low">Low</option> {/* Changed to lowercase */}
               </select>
               <select
                 value={filters.category}
@@ -202,7 +202,8 @@ export default function TodoPage() {
                 <option value="Entertainment">Entertainment</option>
                 <option value="Healthcare">Healthcare</option>
                 <option value="Education">Education</option>
-                <option value="Other">Other</option>
+                <option value="Savings">Savings</option>
+                <option value="Budgeting">Budgeting</option>
               </select>
             </div>
           </div>
@@ -231,91 +232,85 @@ export default function TodoPage() {
                 <label className="block text-sm font-medium text-gray-700">Title</label>
                 <input
                   type="text"
-                  required
                   value={newTodo.title}
                   onChange={(e) => setNewTodo(prev => ({ ...prev, title: e.target.value }))}
-                  className="form-input mt-1"
-                  placeholder="Enter task title"
+                  required
+                  className="form-input w-full"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Description</label>
                 <textarea
-                  required
                   value={newTodo.description}
                   onChange={(e) => setNewTodo(prev => ({ ...prev, description: e.target.value }))}
-                  className="form-input mt-1"
-                  rows={3}
-                  placeholder="Enter task description"
+                  required
+                  className="form-input w-full"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Priority</label>
-                  <select
-                    value={newTodo.priority}
-                    onChange={(e) => setNewTodo(prev => ({ ...prev, priority: e.target.value as TodoPriority }))}
-                    className="form-input mt-1"
-                  >
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Due Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={newTodo.dueDate}
-                    onChange={(e) => setNewTodo(prev => ({ ...prev, dueDate: e.target.value }))}
-                    className="form-input mt-1"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Budget (Optional)</label>
-                  <input
-                    type="number"
-                    value={newTodo.budget}
-                    onChange={(e) => setNewTodo(prev => ({ ...prev, budget: e.target.value }))}
-                    className="form-input mt-1"
-                    placeholder="Enter budget"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Category (Optional)</label>
-                  <select
-                    value={newTodo.category}
-                    onChange={(e) => setNewTodo(prev => ({ ...prev, category: e.target.value as ExpenseCategory }))}
-                    className="form-input mt-1"
-                  >
-                    <option value="">Select category</option>
-                    <option value="Food">Food</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Bills">Bills</option>
-                    <option value="Shopping">Shopping</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Healthcare">Healthcare</option>
-                    <option value="Education">Education</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex justify-end space-x-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="btn-secondary"
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Priority</label>
+                <select
+                  value={newTodo.priority}
+                  onChange={(e) => setNewTodo(prev => ({ ...prev, priority: e.target.value as TodoPriority }))}
+                  required
+                  className="form-input w-full"
                 >
-                  Cancel
-                </button>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Due Date</label>
+                <input
+                  type="date"
+                  value={newTodo.dueDate}
+                  onChange={(e) => setNewTodo(prev => ({ ...prev, dueDate: e.target.value }))}
+                  required
+                  className="form-input w-full"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Budget</label>
+                <input
+                  type="number"
+                  value={newTodo.budget}
+                  onChange={(e) => setNewTodo(prev => ({ ...prev, budget: e.target.value }))}
+                  className="form-input w-full"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Category</label>
+                <select
+                  value={newTodo.category}
+                  onChange={(e) => setNewTodo(prev => ({ ...prev, category: e.target.value as ExpenseCategory }))}
+                  required
+                  className="form-input w-full"
+                >
+                  <option value="Food">Food</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Bills">Bills</option>
+                  <option value="Shopping">Shopping</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Healthcare">Healthcare</option>
+                  <option value="Education">Education</option>
+                  <option value="Savings">Savings</option>
+                  <option value="Budgeting">Budgeting</option>
+                </select>
+              </div>
+              <div className="flex justify-end mt-4">
                 <button
                   type="submit"
                   className="btn-primary"
                 >
-                  Add Task
+                  Save
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="ml-2 btn-secondary"
+                >
+                  Cancel
                 </button>
               </div>
             </form>
@@ -324,4 +319,4 @@ export default function TodoPage() {
       )}
     </div>
   );
-} 
+}

@@ -10,7 +10,8 @@ const categoryColors: Record<ExpenseCategory, string> = {
   Entertainment: 'bg-yellow-100 text-yellow-800',
   Healthcare: 'bg-pink-100 text-pink-800',
   Education: 'bg-indigo-100 text-indigo-800',
-  Other: 'bg-gray-100 text-gray-800'
+  Savings: 'bg-teal-100 text-teal-800',
+  Budgeting: 'bg-gray-100 text-gray-800'
 };
 
 interface ExpenseCardProps {

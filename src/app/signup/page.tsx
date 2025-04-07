@@ -21,7 +21,7 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
   const router = useRouter();
   const { signup } = useAuth();
 
