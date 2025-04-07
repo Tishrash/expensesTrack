@@ -13,7 +13,7 @@ import {
 export default function Footer() {
   const navigation = {
     main: [
-      { name: 'Dashboard', href: '/', icon: HomeIcon },
+      { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
       { name: 'Add Expense', href: '/add-expense', icon: PlusCircleIcon },
       { name: 'History', href: '/history', icon: ClockIcon },
       { name: 'Financial Tasks', href: '/financial-tasks', icon: ChartBarIcon },
