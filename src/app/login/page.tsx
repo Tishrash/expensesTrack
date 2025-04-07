@@ -49,7 +49,7 @@ export default function LoginPage() {
       setToastMessage('Login successful!');
       setToastType('success');
       setShowToast(true);
-      router.push('/');
+      router.push('/dashboard');
     } catch (error) {
       setToastMessage('Invalid credentials. Please try again.');
       setToastType('error');
