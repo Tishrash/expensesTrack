@@ -231,11 +231,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Generate user ID
       const userId = Date.now().toString();
 
-      // Create new user data
+      // Create new user data with password for registeredUsers
       const newUser: RegisteredUser = {
         id: userId,
         email,
-        name,        // Use the provided name
+        name,
         password
       };
 
@@ -243,11 +243,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       registeredUsers.push(newUser);
       localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
 
-      // Create current session user data
+      // Create current session user data without password
       const currentUser = {
         id: userId,
-        email: email,
-        name: name    // Use the provided name here too
+        email,
+        name
       };
 
       // Set current user session
@@ -273,15 +273,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     router.push('/login');
   };
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      logout();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
 
   return (
     <AuthContext.Provider value={{ user, isLoading, login, signup, logout }}>
