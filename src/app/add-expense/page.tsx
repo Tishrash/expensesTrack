@@ -65,7 +65,7 @@ export default function AddExpensePage() {
 
       // Redirect to dashboard after a short delay
       setTimeout(() => {
-        router.push('/');
+        router.push('/dashboard');
       }, 1500);
     } catch (err) {
       setToastMessage('Failed to add expense');

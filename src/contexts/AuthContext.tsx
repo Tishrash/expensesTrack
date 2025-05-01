@@ -27,7 +27,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  // Initialize demo accounts when the app starts
   useEffect(() => {
+    // Initialize demo accounts in localStorage if they don't exist
+    const registeredUsers: RegisteredUser[] = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    
+    // Add demo accounts if they don't exist
+    const demoAccounts = [
+      {
+        id: '1',
+        email: 'tishanrashmika00@gmail.com',
+        password: 'Tishan@123',
+        name: 'Tishan Rashmika'
+      },
+      {
+        id: '2',
+        email: 'rashmikagamage@gmail.com',
+        password: 'Tishan@123',
+        name: 'Rashmika Gamage'
+      },
+      {
+        id: '3',
+        email: 'gamage@gmail.com',
+        password: 'Gamage@123',
+        name: 'Gamage'
+      }
+    ];
+
+    // Clear existing users and reinitialize
+    localStorage.setItem('registeredUsers', JSON.stringify(demoAccounts));
+
+    // Initialize sample data for each account
+    demoAccounts.forEach(account => {
+      initializeSampleData(account.id);
+    });
+
     // Check for existing auth token
     const token = Cookies.get('auth_token');
     if (token) {
@@ -40,159 +74,97 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const initializeSampleData = (userId: string) => {
-    // Check if sample data already exists
+    // Check if user already has expense data
     const existingExpenses = localStorage.getItem(`expenses_${userId}`);
-    if (!existingExpenses) {
-      // Sample expenses data
-      const sampleExpenses = [
-        {
-          id: '1',
-          amount: 150.50,
-          category: 'Food',
-          date: '2024-03-15',
-          description: 'Grocery shopping at Walmart',
-          userId: userId
-        },
-        {
-          id: '2',
-          amount: 45.00,
-          category: 'Transport',
-          date: '2024-03-14',
-          description: 'Gas station refill',
-          userId: userId
-        },
-        {
-          id: '3',
-          amount: 200.00,
-          category: 'Bills',
-          date: '2024-03-13',
-          description: 'Monthly electricity bill',
-          userId: userId
-        },
-        {
-          id: '4',
-          amount: 75.25,
-          category: 'Entertainment',
-          date: '2024-03-12',
-          description: 'Movie night with friends',
-          userId: userId
-        },
-        {
-          id: '5',
-          amount: 120.00,
-          category: 'Shopping',
-          date: '2024-03-11',
-          description: 'New clothes from H&M',
-          userId: userId
-        },
-        {
-          id: '6',
-          amount: 85.00,
-          category: 'Healthcare',
-          date: '2024-03-10',
-          description: 'Monthly medicine prescription',
-          userId: userId
-        },
-        {
-          id: '7',
-          amount: 299.99,
-          category: 'Education',
-          date: '2024-03-09',
-          description: 'Online course subscription',
-          userId: userId
-        },
-        {
-          id: '8',
-          amount: 500.00,
-          category: 'Savings',
-          date: '2024-03-08',
-          description: 'Monthly savings deposit',
-          userId: userId
-        },
-        {
-          id: '9',
-          amount: 65.50,
-          category: 'Food',
-          date: '2024-03-07',
-          description: 'Restaurant dinner',
-          userId: userId
-        },
-        {
-          id: '10',
-          amount: 35.00,
-          category: 'Transport',
-          date: '2024-03-06',
-          description: 'Uber ride',
-          userId: userId
-        },
-        {
-          id: '11',
-          amount: 89.99,
-          category: 'Bills',
-          date: '2024-03-05',
-          description: 'Internet bill',
-          userId: userId
-        },
-        {
-          id: '12',
-          amount: 150.00,
-          category: 'Shopping',
-          date: '2024-03-04',
-          description: 'Electronics accessories',
-          userId: userId
-        },
-        {
-          id: '13',
-          amount: 250.00,
-          category: 'Healthcare',
-          date: '2024-03-03',
-          description: 'Dental checkup',
-          userId: userId
-        },
-        {
-          id: '14',
-          amount: 50.00,
-          category: 'Entertainment',
-          date: '2024-03-02',
-          description: 'Gaming subscription',
-          userId: userId
-        },
-        {
-          id: '15',
-          amount: 1000.00,
-          category: 'Savings',
-          date: '2024-03-01',
-          description: 'Emergency fund contribution',
-          userId: userId
-        }
-      ];
-
-      // Store sample expenses
-      localStorage.setItem(`expenses_${userId}`, JSON.stringify(sampleExpenses));
+    if (existingExpenses) {
+      // If user already has data, don't initialize sample data
+      return;
     }
+
+    // Initialize empty array for user 2 and user 3
+    if (userId === '2' || userId === '3') {
+      localStorage.setItem(`expenses_${userId}`, JSON.stringify([]));
+      return;
+    }
+
+    // For other users, initialize with sample data if they don't have any data yet
+    const sampleExpenses = [
+      {
+        id: '1',
+        amount: 3500.00,
+        category: 'Food',
+        date: new Date().toISOString().split('T')[0], // Today's date
+        description: 'Monthly food expenses',
+        userId: userId
+      },
+      {
+        id: '2',
+        amount: 2000.00,
+        category: 'Transport',
+        date: new Date(Date.now() - 86400000).toISOString().split('T')[0], // Yesterday
+        description: 'Car maintenance',
+        userId: userId
+      },
+      {
+        id: '3',
+        amount: 4500.00,
+        category: 'Bills',
+        date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0],
+        description: 'Monthly utility bills',
+        userId: userId
+      },
+      {
+        id: '4',
+        amount: 1500.00,
+        category: 'Entertainment',
+        date: new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0],
+        description: 'Concert tickets',
+        userId: userId
+      },
+      {
+        id: '5',
+        amount: 6000.00,
+        category: 'Shopping',
+        date: new Date(Date.now() - 4 * 86400000).toISOString().split('T')[0],
+        description: 'Electronics purchase',
+        userId: userId
+      },
+      {
+        id: '6',
+        amount: 2500.00,
+        category: 'Healthcare',
+        date: new Date(Date.now() - 5 * 86400000).toISOString().split('T')[0],
+        description: 'Health insurance',
+        userId: userId
+      },
+      {
+        id: '7',
+        amount: 7500.00,
+        category: 'Education',
+        date: new Date(Date.now() - 6 * 86400000).toISOString().split('T')[0],
+        description: 'Professional certification',
+        userId: userId
+      },
+      {
+        id: '8',
+        amount: 15000.00,
+        category: 'Savings',
+        date: new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0],
+        description: 'Investment deposit',
+        userId: userId
+      }
+    ];
+
+    // Store sample expenses
+    localStorage.setItem(`expenses_${userId}`, JSON.stringify(sampleExpenses));
   };
 
   const login = async (email: string, password: string) => {
     try {
-      // First check for demo account
-      if (email === 'tishanrashmika00@gmail.com' && password === 'Tishan@123') {
-        const userData = {
-          id: '1',
-          email,
-          name: 'Tishan Rashmika'
-        };
-        localStorage.setItem('current_user', JSON.stringify(userData));
-        setUser(userData);
-        Cookies.set('auth_token', 'demo_token', { expires: 1 });
-        initializeSampleData(userData.id);
-        router.push('/dashboard');
-        return;
-      }
-
-      // Check registered users
+      // Get registered users
       const registeredUsers: RegisteredUser[] = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
       
-      // Find user by email first
+      // Find user by email (case-insensitive)
       const foundUser = registeredUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
       
       // If no user found or password doesn't match
@@ -206,10 +178,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: foundUser.name
       };
 
+      // Force reinitialize sample data on login
+      initializeSampleData(foundUser.id);
+
       localStorage.setItem('current_user', JSON.stringify(userData));
       setUser(userData);
       Cookies.set('auth_token', 'user_token', { expires: 1 });
-      initializeSampleData(userData.id);
       router.push('/dashboard');
 
     } catch (error) {

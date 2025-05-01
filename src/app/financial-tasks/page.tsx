@@ -59,6 +59,23 @@ const mockTodos: Todo[] = [
   }
 ];
 
+// Initialize todos in localStorage if they don't exist
+const initializeTodos = (userId: string) => {
+  const existingTodos = localStorage.getItem(`todos_${userId}`);
+  if (!existingTodos) {
+    // For user 3 (Gamage), initialize empty todos
+    if (userId === '3') {
+      localStorage.setItem(`todos_${userId}`, JSON.stringify([]));
+    } else {
+      // For other users, use mock data
+      localStorage.setItem(`todos_${userId}`, JSON.stringify(mockTodos.map(todo => ({
+        ...todo,
+        userId
+      }))));
+    }
+  }
+};
+
 export default function FinancialTasksPage() {
   const { user } = useAuth();
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -82,10 +99,15 @@ export default function FinancialTasksPage() {
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
 
   useEffect(() => {
-    // In a real app, fetch todos from your API
-    setTodos(mockTodos);
-    setFilteredTodos(mockTodos);
-  }, []);
+    if (user) {
+      // Initialize todos for the user
+      initializeTodos(user.id);
+      // Load todos from localStorage
+      const userTodos = JSON.parse(localStorage.getItem(`todos_${user.id}`) || '[]');
+      setTodos(userTodos);
+      setFilteredTodos(userTodos);
+    }
+  }, [user]);
 
   useEffect(() => {
     let result = [...todos];
@@ -104,20 +126,29 @@ export default function FinancialTasksPage() {
   }, [filters, todos]);
 
   const handleStatusChange = (id: string, status: TodoStatus) => {
+    if (!user) return;
+    
     const updatedTodos = todos.map(todo =>
       todo.id === id ? { ...todo, status, updatedAt: new Date().toISOString() } : todo
     );
     setTodos(updatedTodos);
+    // Save to localStorage
+    localStorage.setItem(`todos_${user.id}`, JSON.stringify(updatedTodos));
     showToastMessage('Todo status updated successfully', 'success');
   };
 
   const handleDelete = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    if (!user) return;
+    
+    const updatedTodos = todos.filter(todo => todo.id !== id);
+    setTodos(updatedTodos);
+    // Save to localStorage
+    localStorage.setItem(`todos_${user.id}`, JSON.stringify(updatedTodos));
     showToastMessage('Todo deleted successfully', 'success');
   };
 
   const handleAddTodo = () => {
-    if (!newTodo.title || !newTodo.description || !newTodo.dueDate || !newTodo.category) {
+    if (!user || !newTodo.title || !newTodo.description || !newTodo.dueDate || !newTodo.category) {
       showToastMessage('Please fill in all required fields', 'error');
       return;
     }
@@ -126,13 +157,17 @@ export default function FinancialTasksPage() {
       id: Date.now().toString(),
       ...newTodo,
       status: 'Todo' as TodoStatus,
-      userId: user?.id || '',
+      userId: user.id,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       budget: newTodo.budget ? parseFloat(newTodo.budget) : undefined
     };
 
-    setTodos([...todos, todo]);
+    const updatedTodos = [...todos, todo];
+    setTodos(updatedTodos);
+    // Save to localStorage
+    localStorage.setItem(`todos_${user.id}`, JSON.stringify(updatedTodos));
+    
     setShowAddModal(false);
     setNewTodo({
       title: '',
