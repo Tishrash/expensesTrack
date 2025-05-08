@@ -60,7 +60,7 @@ A modern web application for tracking personal expenses and managing budgets eff
 
 1. **Clone the repository**
    ```bash
-   git clone [your-repository-url]
+   git clone https://github.com/Tishrash/expensesTrack.git
    cd expensesTrack
    ```
 
