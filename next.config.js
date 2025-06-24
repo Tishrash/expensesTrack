@@ -1,14 +1,13 @@
 /** @type {import('next').NextConfig} */
-const repo = 'expensesTrack'; // 👉 මෙතැන ඔබේ GitHub repo නම දාන්න
-
 const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
   },
-  basePath: `/${repo}`,
-  assetPrefix: `/${repo}/`,
+  // Add basePath if your site is not at the root of the domain
+  // basePath: '/expensesTrack',
+  // Add trailingSlash for GitHub Pages compatibility
   trailingSlash: true,
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig 
