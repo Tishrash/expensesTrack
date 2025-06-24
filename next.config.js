@@ -1,4 +1,5 @@
-const repo = 'expensesTrack';
+/** @type {import('next').NextConfig} */
+const repo = 'expensesTrack'; // ඔබේ GitHub repo name එක
 
 const nextConfig = {
   output: 'export',
